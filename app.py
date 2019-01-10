@@ -15,11 +15,38 @@ app = Flask(__name__)
 @app.route('/')
 def ok():
   r = {
+    "ok": True
+  }
+  return json.dumps(r)
+
+
+@app.route('/debug/')
+def debug():
+  r = {
     "ok": True,
     "port": os.environ['PORT'],
     "env": [ [key, os.environ[key]] for key in os.environ ]
   }
   return json.dumps(r)
+
+
+@app.route('/dump/')
+def dump():
+  r = {}
+  for i in Cluster.select():
+    try:
+      data = Config.select().join(Cluster).where(Cluster.name == i.name).order_by(Config.date_create.desc()).limit(1).get().data
+      r[i.name] = json.loads(data)
+    except:
+      if i.name != 'favicon.ico':
+        r[i.name] = ''
+  return json.dumps(r)
+
+
+
+
+# favicon.ico
+
 
 def get_cluster(name):
   result = [ i for i in Cluster.select() if i.name == name ]
