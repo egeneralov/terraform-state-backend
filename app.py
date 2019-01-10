@@ -8,6 +8,10 @@ from config import config
 
 app = Flask(__name__)
 
+@app.route('/')
+def ok(cluster):
+  return '{"ok": true}'
+
 @app.route('/<cluster>/', methods=['GET'])
 def get_state(cluster):
   url = config[cluster]
