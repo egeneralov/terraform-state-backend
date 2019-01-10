@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import json
 import requests
 from flask import Flask, request
@@ -35,4 +36,8 @@ def save_config():
   return str(data)
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', port=5000, debug=True)
+  app.run(
+    host='0.0.0.0',
+    port=os.environ['PORT'],
+    debug=True
+  )
