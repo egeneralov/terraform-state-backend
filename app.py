@@ -13,7 +13,8 @@ app = Flask(__name__)
 def ok():
   r = {
     "ok": True,
-    "port": os.environ['PORT']
+    "port": os.environ['PORT'],
+    "env": [ [key, os.environ[key]] for key in os.environ ]
   }
   return json.dumps(r)
 
