@@ -11,7 +11,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def ok():
-  return '{"ok": true}'
+  r = {
+    "ok": True,
+    "port": os.environ['PORT']
+  }
+  return json.dumps(r)
 
 @app.route('/<cluster>/', methods=['GET'])
 def get_state(cluster):
@@ -38,6 +42,6 @@ def save_config():
 if __name__ == '__main__':
   app.run(
     host='0.0.0.0',
-    port=os.environ['PORT'],
+    port=int(os.environ['PORT']),
     debug=True
   )
