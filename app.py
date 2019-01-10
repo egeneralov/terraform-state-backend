@@ -10,7 +10,7 @@ from config import config
 app = Flask(__name__)
 
 @app.route('/')
-def ok(cluster):
+def ok():
   return '{"ok": true}'
 
 @app.route('/<cluster>/', methods=['GET'])
