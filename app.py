@@ -6,8 +6,11 @@ import json
 import requests
 from flask import Flask, request
 from config import config
+from db import Cluster, Config
+
 
 app = Flask(__name__)
+
 
 @app.route('/')
 def ok():
@@ -18,31 +21,38 @@ def ok():
   }
   return json.dumps(r)
 
-@app.route('/<cluster>/', methods=['GET'])
-def get_state(cluster):
-  url = config[cluster]
-  return requests.get(url).text
+def get_cluster(name):
+  result = [ i for i in Cluster.select() if i.name == name ]
+  if not result:
+    cl = Cluster(name=name)
+    cl.save()
+    return cl
+  return result[0]
 
 
-@app.route('/<cluster>/', methods=['POST'])
-def upload_new_file(cluster):
-  url = config[cluster]
-  data = request.get_data()
-  files = {'file': data}
-  r = requests.post(url=url, files=files)
-  if r.ok:
-    return data
+@app.route('/<name>/', methods=['GET'])
+def get_state(name):
+  cl = get_cluster(name)
+  it = Config.select().join(Cluster).where(Cluster.name == name).order_by(Config.date_create.desc())
+  r = [ i for i in it ]
+  if not r:
+    return ''
+  return r[0].data
 
-@app.route('/config/', methods=['POST'])
-def save_config():
-  data = request.get_json(force=True)
-  with open('config.py', "w+") as f:
-    f.write('config = ' + str(data))
-  return str(data)
+
+@app.route('/<name>/', methods=['POST'])
+def write_state(name):
+  st = Config(
+    data=request.get_data(),
+    cluster=get_cluster(name)
+  )
+  if st.save():
+    return st.data
+
 
 if __name__ == '__main__':
   app.run(
     host='0.0.0.0',
-    port=int(os.environ['PORT']),
+    port=config['port'],
     debug=True
   )
