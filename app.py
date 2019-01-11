@@ -13,8 +13,8 @@ from flask_httpauth import HTTPBasicAuth
 from config import config
 from db import Cluster, Config, Auth
 
-def jsonify(json):
-  return Response(json.dumps(json, default=str), mimetype='application/json')
+def jsonify(data):
+  return Response(json.dumps(data, default=str), mimetype='application/json')
 
 app = Flask(__name__)
 # auth = HTTPBasicAuth()
