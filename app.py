@@ -99,6 +99,7 @@ def get_cluster(name):
 @auth.login_required
 def get_state(name):
   if not auth.username() != name:
+    print(auth.username(), name)
     return '', 401
   cl = get_cluster(name)
   it = Config.select().join(Cluster).where(Cluster.name == name).order_by(Config.date_create.desc())
@@ -112,6 +113,7 @@ def get_state(name):
 @auth.login_required
 def write_state(name):
   if not auth.username() != name:
+    print(auth.username(), name)
     return '', 401
   st = Config(
     data=request.get_data(),
