@@ -22,7 +22,13 @@ class Config(BaseModel):
   date_create = peewee.DateTimeField(unique=False, null=False, default = datetime.datetime.now)
 
 
+class Auth(BaseModel):
+  username = peewee.CharField(unique=True, null=False)
+  password = peewee.CharField(unique=False, null=False)
+  date_create = peewee.DateTimeField(unique=False, null=False, default = datetime.datetime.now)
+
+
 db = connect(config['database'])
 db.create_tables([
-  Cluster, Config
+  Cluster, Config, Auth
 ])
