@@ -21,7 +21,6 @@ auth = HTTPBasicAuth()
 
 
 KEY = uuid.uuid4()
-print('\n\n\n{}\n\n\n'.format(KEY))
 @app.route('/{}/<username>/<password>/'.format(KEY))
 def create_user(username, password):
     "Create user, secured by random key, check runtime output"
@@ -44,6 +43,7 @@ def ok():
   r = {
     "ok": True
   }
+  print(KEY)
   return json.dumps(r)
 
 
