@@ -16,26 +16,26 @@ from db import Cluster, Config, Auth
 
 
 app = Flask(__name__)
-auth = HTTPBasicAuth()
+# auth = HTTPBasicAuth()
 
 
 
-KEY = uuid.uuid4()
-@app.route('/{}/<username>/<password>/'.format(KEY))
-def create_user(username, password):
-    "Create user, secured by random key, check runtime output"
-    u = Auth(
-        username=username,
-        password=password
-    )
-    return str(u.save())
+# KEY = uuid.uuid4()
+# @app.route('/{}/<username>/<password>/'.format(KEY))
+# def create_user(username, password):
+#     "Create user, secured by random key, check runtime output"
+#     u = Auth(
+#         username=username,
+#         password=password
+#     )
+#     return str(u.save())
 
 
-@auth.get_password
-def get_pw(username):
-  if username in [ i.username for i in Auth.select() ]:
-    return Auth.select().where(Auth.username == username).get().password
-  return None
+# @auth.get_password
+# def get_pw(username):
+#   if username in [ i.username for i in Auth.select() ]:
+#     return Auth.select().where(Auth.username == username).get().password
+#   return None
 
 
 @app.route('/')
@@ -43,15 +43,15 @@ def ok():
   r = {
     "ok": True
   }
-  print(KEY)
+  # print(KEY)
   return json.dumps(r)
 
 
 @app.route('/debug/')
-@auth.login_required
+# @auth.login_required
 def debug():
-  if not auth.username() in ['egeneralov']:
-    return '{}'
+  # if not auth.username() in ['egeneralov']:
+  #   return '{}'
   r = {
     "ok": True,
     "port": os.environ['PORT'],
@@ -61,10 +61,10 @@ def debug():
 
 
 @app.route('/dump/')
-@auth.login_required
+# @auth.login_required
 def dump():
-  if not auth.username() in ['egeneralov']:
-    return '{}', 401
+  # if not auth.username() in ['egeneralov']:
+  #   return '{}', 401
   r = {}
   for i in Cluster.select():
     try:
@@ -96,11 +96,11 @@ def get_cluster(name):
 
 
 @app.route('/<name>/', methods=['GET'])
-@auth.login_required
+# @auth.login_required
 def get_state(name):
-  if not auth.username() != name:
-    print(auth.username(), name)
-    return '', 401
+  # if not auth.username() != name:
+  #   print(auth.username(), name)
+  #   return '', 401
   cl = get_cluster(name)
   it = Config.select().join(Cluster).where(Cluster.name == name).order_by(Config.date_create.desc())
   r = [ i for i in it ]
@@ -110,11 +110,11 @@ def get_state(name):
 
 
 @app.route('/<name>/', methods=['POST'])
-@auth.login_required
+# @auth.login_required
 def write_state(name):
-  if not auth.username() != name:
-    print(auth.username(), name)
-    return '', 401
+  # if not auth.username() != name:
+  #   print(auth.username(), name)
+  #   return '', 401
   st = Config(
     data=request.get_data(),
     cluster=get_cluster(name)
