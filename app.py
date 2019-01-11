@@ -13,7 +13,8 @@ from flask_httpauth import HTTPBasicAuth
 from config import config
 from db import Cluster, Config, Auth
 
-
+def jsonify(json):
+  return Response(json.dumps(json, default=str), mimetype='application/json')
 
 app = Flask(__name__)
 # auth = HTTPBasicAuth()
@@ -44,7 +45,7 @@ def ok():
     "ok": True
   }
   # print(KEY)
-  return json.dumps(r)
+  return jsonify(r)
 
 
 @app.route('/debug/')
@@ -57,7 +58,7 @@ def debug():
     "port": os.environ['PORT'],
     "env": [ [key, os.environ[key]] for key in os.environ ]
   }
-  return json.dumps(r)
+  return jsonify(r)
 
 
 @app.route('/dump/')
@@ -73,7 +74,7 @@ def dump():
     except:
       if i.name != 'favicon.ico':
         r[i.name] = ''
-  return json.dumps(r)
+  return jsonify(r)
 
 
 
