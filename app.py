@@ -107,7 +107,7 @@ def get_state(name):
   r = [ i for i in it ]
   if not r:
     return ''
-  return jsonify(r[0].data)
+  return jsonify(json.loads(r[0].data))
 
 
 @app.route('/<name>/', methods=['POST'])
@@ -121,7 +121,7 @@ def write_state(name):
     cluster=get_cluster(name)
   )
   if st.save():
-    return jsonify(st.data)
+    return jsonify(json.loads(st.data))
 
 
 if __name__ == '__main__':
