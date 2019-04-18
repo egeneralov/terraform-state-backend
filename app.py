@@ -8,7 +8,7 @@ from base64 import b64decode
 
 import requests
 from flask import Flask, request, Response
-from flask_httpauth import HTTPBasicAuth
+# from flask_httpauth import HTTPBasicAuth
 
 from config import config
 from db import Cluster, Config, Auth

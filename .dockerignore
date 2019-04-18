@@ -1,0 +1,10 @@
+.git
+.gitignore
+.dockerignore
+.gitlab-ci.yml
+Dockerfile
+.dockerignore
+docker-compose.yml
+__pycache__
+
+example.json

@@ -2,4 +2,3 @@ flask
 requests
 psycopg2-binary
 peewee
-Flask-HTTPAuth
